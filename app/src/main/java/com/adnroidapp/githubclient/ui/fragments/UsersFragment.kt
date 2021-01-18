@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adnroidapp.githubclient.App
 import com.adnroidapp.githubclient.R
 import com.adnroidapp.githubclient.mvp.model.entity.GitHubUsersRepo
-import com.adnroidapp.githubclient.mvp.presenter.UserPresenter
+import com.adnroidapp.githubclient.mvp.presenter.UsersPresenter
 import com.adnroidapp.githubclient.mvp.view.UsersView
 import com.adnroidapp.githubclient.ui.BackButtonListener
 import com.adnroidapp.githubclient.ui.adapter.AdapterUsers
@@ -20,7 +20,12 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     private var adapterUser: AdapterUsers? = null
 
-    private val presenter by moxyPresenter { UserPresenter(GitHubUsersRepo(), App.instance.router) }
+    private val presenter by moxyPresenter {
+        UsersPresenter(
+            GitHubUsersRepo(),
+            App.instance.router
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

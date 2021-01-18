@@ -1,16 +1,10 @@
 package com.adnroidapp.githubclient.ui
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.adnroidapp.githubclient.App
 import com.adnroidapp.githubclient.R
-import com.adnroidapp.githubclient.mvp.model.entity.GitHubUsersRepo
 import com.adnroidapp.githubclient.mvp.presenter.MainPresenter
 import com.adnroidapp.githubclient.mvp.view.MainView
-import com.adnroidapp.githubclient.ui.adapter.AdapterUsers
-import com.adnroidapp.githubclient.ui.fragments.UsersFragment
-import kotlinx.android.synthetic.main.activity_main.*
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
@@ -39,12 +33,17 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onBackPressed() {
         super.onBackPressed()
-
+        val watchListFragment = supportFragmentManager.fragments
+        //TODO(fix - in supportFragmentManager only one fragment comes)
         supportFragmentManager.fragments.forEach {
             if (it is BackButtonListener && it.backPressed()) {
                 return
             }
         }
         presenter.backClicked()
+    }
+
+    companion object {
+        const val KEY_USER_FRAGMENT = "KEY_USER_FRAGMENT"
     }
 }
