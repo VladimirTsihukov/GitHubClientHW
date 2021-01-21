@@ -5,47 +5,43 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.adnroidapp.githubclient.ApiHolder
 import com.adnroidapp.githubclient.App
 import com.adnroidapp.githubclient.R
-import com.adnroidapp.githubclient.mvp.model.entity.GitHubUsersRepo
+import com.adnroidapp.githubclient.mvp.model.repo.retrofit.RetrofitGithubUsersRepo
 import com.adnroidapp.githubclient.mvp.presenter.UsersPresenter
 import com.adnroidapp.githubclient.mvp.view.UsersView
 import com.adnroidapp.githubclient.ui.BackButtonListener
 import com.adnroidapp.githubclient.ui.adapter.AdapterUsers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_users.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import com.adnroidapp.githubclient.ui.image.GlideImageLoader
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
-
-    private var adapterUser: AdapterUsers? = null
-
-    private val presenter by moxyPresenter {
-        UsersPresenter(
-            GitHubUsersRepo(),
-            App.instance.router
-        )
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = View.inflate(context, R.layout.fragment_users, null)
-
-    override fun init() {
-        rv_user.layoutManager = LinearLayoutManager(context)
-        adapterUser = AdapterUsers(presenter.userListPresenter)
-        rv_user.adapter = adapterUser
-    }
-
-    override fun updateList() {
-        adapterUser?.notifyDataSetChanged()
-    }
-
     companion object {
         fun newInstance() = UsersFragment()
     }
 
-    override fun backPressed(): Boolean = presenter.backPressed()
+    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(AndroidSchedulers.mainThread(),
+        RetrofitGithubUsersRepo(ApiHolder().api),
+        App.instance.router) }
+
+    var adapter: AdapterUsers? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        View.inflate(context, R.layout.fragment_users, null)
+
+    override fun init() {
+        rv_user.layoutManager = LinearLayoutManager(context)
+        adapter = AdapterUsers(presenter.usersListPresenter, GlideImageLoader())
+        rv_user.adapter = adapter
+    }
+
+    override fun updateList() {
+        adapter?.notifyDataSetChanged()
+    }
+
+    override fun backPressed() = presenter.backPressed()
 }

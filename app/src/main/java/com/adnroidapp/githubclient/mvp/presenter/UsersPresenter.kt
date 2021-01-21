@@ -1,48 +1,61 @@
 package com.adnroidapp.githubclient.mvp.presenter
 
-import com.adnroidapp.githubclient.mvp.model.entity.GitHubUsersRepo
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
-import com.adnroidapp.githubclient.mvp.navigation.Screens
+import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsersRepo
 import com.adnroidapp.githubclient.mvp.presenter.list.IUserListPresenter
 import com.adnroidapp.githubclient.mvp.view.UsersView
 import com.adnroidapp.githubclient.mvp.view.list.UserItemView
+import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
 
-class UsersPresenter(private val usersRepo: GitHubUsersRepo, private val router: Router): MvpPresenter<UsersView>() {
-    val userListPresenter = UserListPresenter()
+class UsersPresenter(
+    val mainThreadScheduler: Scheduler,
+    val usersRepo: IGithubUsersRepo,
+    val router: Router
+) : MvpPresenter<UsersView>() {
+
+    class UsersListPresenter : IUserListPresenter {
+        val users = mutableListOf<GithubUser>()
+
+        override var itemClickListener: ((UserItemView) -> Unit)? = null
+
+        override fun getCount() = users.size
+
+        override fun bindView(view: UserItemView) {
+            val user = users[view.pos]
+
+            user.login?.let { view.setLogin(it) }
+            user.avatarUrl?.let { view.loadAvatar(it) }
+        }
+    }
+
+    val usersListPresenter = UsersListPresenter()
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
         loadData()
 
-        userListPresenter.itemClickListener = {
-            router.navigateTo(Screens.UserScreen(userListPresenter.users[it.pos].login))
+        usersListPresenter.itemClickListener = { itemView ->
+            // TODO:
         }
     }
 
     private fun loadData() {
-        val users = usersRepo.getUsers()
-        userListPresenter.users.addAll(users)
-        viewState.updateList()
+        usersRepo.getUsers()
+            .observeOn(mainThreadScheduler)
+            .subscribe({ users ->
+                usersListPresenter.users.clear()
+                usersListPresenter.users.addAll(users)
+                viewState.updateList()
+            }, {
+                println("Error: ${it.message}")
+            })
     }
 
     fun backPressed(): Boolean {
         router.exit()
         return true
-    }
-
-    class UserListPresenter : IUserListPresenter {   //presenter работает с каждым listItems
-        val users = mutableListOf<GithubUser>()
-
-        override var itemClickListener: ((UserItemView) -> Unit)? = null
-
-        override fun bindView(view: UserItemView) {
-            val user = users[view.pos]
-            view.setLogin(user.login)
-        }
-
-        override fun getCount(): Int = users.size
     }
 }
