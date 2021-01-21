@@ -32,9 +32,6 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        val watchListFragment = supportFragmentManager.fragments
-        //TODO(fix - in supportFragmentManager only one fragment comes)
         supportFragmentManager.fragments.forEach {
             if (it is BackButtonListener && it.backPressed()) {
                 return
