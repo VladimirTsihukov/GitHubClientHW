@@ -10,7 +10,7 @@ import com.adnroidapp.githubclient.mvp.model.api.IDataSource
 class ApiHolder {
     val api: IDataSource by lazy {
         val gson = GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)    //преобразование имени поля json
             .excludeFieldsWithoutExposeAnnotation()
             .create()
 

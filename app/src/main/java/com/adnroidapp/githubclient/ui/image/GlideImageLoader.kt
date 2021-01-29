@@ -9,6 +9,5 @@ class GlideImageLoader : IImageLoader<ImageView> {
         Glide.with(container.context)
             .load(url)
             .into(container)
-
     }
 }

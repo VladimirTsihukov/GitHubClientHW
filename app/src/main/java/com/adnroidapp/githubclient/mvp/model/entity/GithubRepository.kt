@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class GithubRepository (
+data class GithubRepository (
     @Expose val id: String,
     @Expose val name: String? = null,
     @Expose val forksCount: Int? = null
