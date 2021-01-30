@@ -1,6 +1,7 @@
 package com.adnroidapp.githubclient.mvp.presenter
 
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
+import com.adnroidapp.githubclient.mvp.model.entity.getUserData
 import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsersRepo
 import com.adnroidapp.githubclient.mvp.navigation.Screens
 import com.adnroidapp.githubclient.mvp.presenter.list.IUserListPresenter
@@ -39,8 +40,18 @@ class UsersPresenter(
         loadData()
 
         usersListPresenter.itemClickListener = {
-            router.navigateTo(Screens.UserScreen(usersListPresenter.users[it.pos].login))
+            router.navigateTo(Screens.UserScreen(usersListPresenter.users[it.pos].reposUrl.toString()))
         }
+    }
+
+    private fun loadRepository(url: String) {
+        usersRepo.getRepositories(url)
+            .observeOn(mainThreadScheduler)
+            .subscribe({
+                val result = it
+            }, {
+                println("Error: ${it.message}")
+            })
     }
 
     private fun loadData() {
