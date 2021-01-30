@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GitHubClient</string>
+    <string name="name">Name</string>
+    <string name="id">ID:</string>
+    <string name="forks_count">Forks count: %s</string>
+    <string name="repo">Repo №%s: %s</string>
 </resources>
