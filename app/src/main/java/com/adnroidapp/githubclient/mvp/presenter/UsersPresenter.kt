@@ -1,7 +1,6 @@
 package com.adnroidapp.githubclient.mvp.presenter
 
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
-import com.adnroidapp.githubclient.mvp.model.entity.getUserData
 import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsersRepo
 import com.adnroidapp.githubclient.mvp.navigation.Screens
 import com.adnroidapp.githubclient.mvp.presenter.list.IUserListPresenter
