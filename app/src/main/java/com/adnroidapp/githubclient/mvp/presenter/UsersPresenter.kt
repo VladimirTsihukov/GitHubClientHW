@@ -11,9 +11,9 @@ import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
 
 class UsersPresenter(
-    val mainThreadScheduler: Scheduler,
-    val usersRepo: IGithubUsersRepo,
-    val router: Router
+    private val mainThreadScheduler: Scheduler,
+    private val usersRepo: IGithubUsersRepo,
+    private val router: Router
 ) : MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUserListPresenter {
@@ -39,18 +39,8 @@ class UsersPresenter(
         loadData()
 
         usersListPresenter.itemClickListener = {
-            router.navigateTo(Screens.UserScreen(usersListPresenter.users[it.pos].reposUrl.toString()))
+            router.navigateTo(Screens.UserScreen(usersListPresenter.users[it.pos]))
         }
-    }
-
-    private fun loadRepository(url: String) {
-        usersRepo.getRepositories(url)
-            .observeOn(mainThreadScheduler)
-            .subscribe({
-                val result = it
-            }, {
-                println("Error: ${it.message}")
-            })
     }
 
     private fun loadData() {
