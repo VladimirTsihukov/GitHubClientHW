@@ -1,6 +1,7 @@
 package com.adnroidapp.githubclient.mvp.presenter
 
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
+import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsers
 import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsersRepo
 import com.adnroidapp.githubclient.mvp.navigation.Screens
 import com.adnroidapp.githubclient.mvp.presenter.list.IUserListPresenter
@@ -12,7 +13,7 @@ import ru.terrakok.cicerone.Router
 
 class UsersPresenter(
     private val mainThreadScheduler: Scheduler,
-    private val usersRepo: IGithubUsersRepo,
+    private val usersRepo: IGithubUsers,
     private val router: Router
 ) : MvpPresenter<UsersView>() {
 

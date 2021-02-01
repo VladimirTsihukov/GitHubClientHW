@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.adnroidapp.githubclient.ApiHolder
 import com.adnroidapp.githubclient.App
 import com.adnroidapp.githubclient.R
+import com.adnroidapp.githubclient.mvp.model.cache.room.RoomGithubRepositoriesCache
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
 import com.adnroidapp.githubclient.mvp.model.entity.room.DatabaseUser
 import com.adnroidapp.githubclient.mvp.model.repo.retrofit.RetrofitGithubUsersRepo
@@ -27,7 +28,8 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView, Bac
                 mainThreadScheduler = AndroidSchedulers.mainThread(),
                 router = App.instance.router,
                 user = it,
-                usersRepo = RetrofitGithubUsersRepo(ApiHolder().api, AndroidNetworkStatus(App.instance), DatabaseUser.getInstance())
+                usersRepo = RetrofitGithubUsersRepo(ApiHolder().api, AndroidNetworkStatus(App.instance), RoomGithubRepositoriesCache(
+                    DatabaseUser.getInstance()))
             )
         }!!
     }
