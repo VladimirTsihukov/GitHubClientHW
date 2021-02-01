@@ -1,7 +1,7 @@
 package com.adnroidapp.githubclient.mvp.presenter
 
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
-import com.adnroidapp.githubclient.mvp.model.entity.getUserData
+import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsers
 import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsersRepo
 import com.adnroidapp.githubclient.mvp.navigation.Screens
 import com.adnroidapp.githubclient.mvp.presenter.list.IUserListPresenter
@@ -12,9 +12,9 @@ import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
 
 class UsersPresenter(
-    val mainThreadScheduler: Scheduler,
-    val usersRepo: IGithubUsersRepo,
-    val router: Router
+    private val mainThreadScheduler: Scheduler,
+    private val usersRepo: IGithubUsers,
+    private val router: Router
 ) : MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUserListPresenter {
@@ -40,18 +40,8 @@ class UsersPresenter(
         loadData()
 
         usersListPresenter.itemClickListener = {
-            router.navigateTo(Screens.UserScreen(usersListPresenter.users[it.pos].reposUrl.toString()))
+            router.navigateTo(Screens.UserScreen(usersListPresenter.users[it.pos]))
         }
-    }
-
-    private fun loadRepository(url: String) {
-        usersRepo.getRepositories(url)
-            .observeOn(mainThreadScheduler)
-            .subscribe({
-                val result = it
-            }, {
-                println("Error: ${it.message}")
-            })
     }
 
     private fun loadData() {
