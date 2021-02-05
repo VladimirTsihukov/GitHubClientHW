@@ -27,14 +27,19 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         fun newInstance() = UsersFragment()
     }
 
-    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(mainThreadScheduler = AndroidSchedulers.mainThread(),
-        usersRepo = RetrofitGithubUsers(ApiHolder().api,
-            AndroidNetworkStatus(App.instance), RoomGithubUsersCache(DatabaseUser.getInstance())),
-        router = App.instance.router) }
+    val presenter: UsersPresenter by moxyPresenter {
+        UsersPresenter(mainThreadScheduler = AndroidSchedulers.mainThread()).apply {
+            App.instance.appComponent.inject(this)
+        }
+    }
 
     var adapter: AdapterUsers? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
         View.inflate(context, R.layout.fragment_users, null)
 
     override fun init() {

@@ -4,4 +4,7 @@
     <string name="id">ID:</string>
     <string name="forks_count">Forks count: %s</string>
     <string name="repo">Repo №%s: %s</string>
+    <string name="repo_id">ID: %s</string>
+    <string name="repo_name">Name: %s</string>
+    <string name="repo_forksCount">ForksCount: %s</string>
 </resources>
