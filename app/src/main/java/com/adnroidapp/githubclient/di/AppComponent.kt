@@ -2,12 +2,10 @@ package com.adnroidapp.githubclient.di
 
 import com.adnroidapp.githubclient.di.modul.*
 import com.adnroidapp.githubclient.mvp.presenter.MainPresenter
+import com.adnroidapp.githubclient.mvp.presenter.RepoPresenter
 import com.adnroidapp.githubclient.mvp.presenter.UserPresenter
 import com.adnroidapp.githubclient.mvp.presenter.UsersPresenter
 import com.adnroidapp.githubclient.ui.MainActivity
-import com.adnroidapp.githubclient.ui.fragments.RepoFragment
-import com.adnroidapp.githubclient.ui.fragments.UserFragment
-import com.adnroidapp.githubclient.ui.fragments.UsersFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -25,9 +23,6 @@ interface AppComponent {            //определяем в какие кла�
     fun inject(mainActivity: MainActivity)
     fun inject(mainPresenter: MainPresenter)
     fun inject(usersPresenter: UsersPresenter)
-
     fun inject(userPresenter: UserPresenter)
-    fun inject(usersFragment: UsersFragment)
-    fun inject(userFragment: UserFragment)
-    fun inject(repoFragment: RepoFragment)
+    fun inject(repoPresenter: RepoPresenter)
 }

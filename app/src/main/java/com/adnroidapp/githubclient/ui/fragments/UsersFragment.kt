@@ -5,19 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.adnroidapp.githubclient.ApiHolder
 import com.adnroidapp.githubclient.App
 import com.adnroidapp.githubclient.R
-import com.adnroidapp.githubclient.mvp.model.cache.room.RoomGithubUsersCache
-import com.adnroidapp.githubclient.mvp.model.entity.room.DatabaseUser
-import com.adnroidapp.githubclient.mvp.model.repo.retrofit.RetrofitGithubUsers
 import com.adnroidapp.githubclient.mvp.presenter.UsersPresenter
 import com.adnroidapp.githubclient.mvp.view.UsersView
 import com.adnroidapp.githubclient.ui.BackButtonListener
 import com.adnroidapp.githubclient.ui.adapter.AdapterUsers
 import com.adnroidapp.githubclient.ui.image.GlideImageLoader
-import com.adnroidapp.githubclient.ui.network.AndroidNetworkStatus
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_users.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -28,9 +22,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     }
 
     val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter(mainThreadScheduler = AndroidSchedulers.mainThread()).apply {
-            App.instance.appComponent.inject(this)
-        }
+        UsersPresenter().apply { App.instance.appComponent.inject(this) }
     }
 
     var adapter: AdapterUsers? = null

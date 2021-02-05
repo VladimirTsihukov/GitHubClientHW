@@ -52,6 +52,5 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     companion object {
         const val KEY_USER_FRAGMENT_URL = "KEY_USER_FRAGMENT_URL"
-        const val KEY_USER_FRAGMENT_AVATAR = "KEY_USER_FRAGMENT_AVATAR"
     }
 }

@@ -10,17 +10,14 @@ import com.adnroidapp.githubclient.ui.BackButtonListener
 import kotlinx.android.synthetic.main.fragment_repo.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import ru.terrakok.cicerone.Router
-import javax.inject.Inject
 
 class RepoFragment: MvpAppCompatFragment(R.layout.fragment_repo), RepoView, BackButtonListener {
 
-    @Inject
-    lateinit var router: Router
-
     val presenter: RepoPresenter by moxyPresenter {
         val repository = arguments?.getParcelable<GithubRepository>(REPO_KEY) as GithubRepository
-        RepoPresenter(repository, router)
+        RepoPresenter(repository).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
     companion object{
@@ -30,7 +27,6 @@ class RepoFragment: MvpAppCompatFragment(R.layout.fragment_repo), RepoView, Back
             arguments = Bundle().apply {
                 putParcelable(REPO_KEY, repository)
             }
-            App.instance.appComponent.inject(this)
         }
     }
 

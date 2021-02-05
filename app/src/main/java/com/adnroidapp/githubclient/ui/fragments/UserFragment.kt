@@ -10,7 +10,6 @@ import com.adnroidapp.githubclient.ui.BackButtonListener
 import com.adnroidapp.githubclient.ui.MainActivity
 import com.adnroidapp.githubclient.ui.adapter.AdapterRepoUser
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_user.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -19,10 +18,7 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView, Bac
 
     private val presenter by moxyPresenter {
         arguments?.getParcelable<GithubUser>(MainActivity.KEY_USER_FRAGMENT_URL)?.let {
-            UserPresenter(
-                user = it,
-                mainThreadScheduler = AndroidSchedulers.mainThread()
-            ).apply {
+            UserPresenter(user = it).apply {
                 App.instance.appComponent.inject(this)
             }
         }!!

@@ -4,8 +4,12 @@ import com.adnroidapp.githubclient.mvp.model.entity.GithubRepository
 import com.adnroidapp.githubclient.mvp.view.RepoView
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class RepoPresenter(private val gitRepo: GithubRepository, val router: Router): MvpPresenter<RepoView>() {
+class RepoPresenter(private val gitRepo: GithubRepository): MvpPresenter<RepoView>() {
+
+    @Inject
+    lateinit var router: Router
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
