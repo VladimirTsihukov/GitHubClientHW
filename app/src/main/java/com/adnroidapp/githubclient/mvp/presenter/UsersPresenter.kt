@@ -2,7 +2,6 @@ package com.adnroidapp.githubclient.mvp.presenter
 
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
 import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsers
-import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsersRepo
 import com.adnroidapp.githubclient.mvp.navigation.Screens
 import com.adnroidapp.githubclient.mvp.presenter.list.IUserListPresenter
 import com.adnroidapp.githubclient.mvp.view.UsersView
@@ -10,12 +9,18 @@ import com.adnroidapp.githubclient.mvp.view.list.UserItemView
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class UsersPresenter(
-    private val mainThreadScheduler: Scheduler,
-    private val usersRepo: IGithubUsers,
-    private val router: Router
-) : MvpPresenter<UsersView>() {
+class UsersPresenter : MvpPresenter<UsersView>() {
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var usersRepo: IGithubUsers
+
+    @Inject
+    lateinit var mainThreadScheduler: Scheduler
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()

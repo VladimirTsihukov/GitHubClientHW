@@ -3,18 +3,25 @@ package com.adnroidapp.githubclient.mvp.presenter
 import com.adnroidapp.githubclient.mvp.model.entity.GithubRepository
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
 import com.adnroidapp.githubclient.mvp.model.repo.IGithubUsersRepo
+import com.adnroidapp.githubclient.mvp.navigation.Screens
 import com.adnroidapp.githubclient.mvp.view.UserView
 import com.adnroidapp.githubclient.mvp.presenter.list.IRepoUserListPresenter
 import com.adnroidapp.githubclient.mvp.view.list.RepoUserItemView
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class UserPresenter (val mainThreadScheduler: Scheduler,
-                     private val router: Router,
-                     val user: GithubUser,
-                     val usersRepo: IGithubUsersRepo,
-): MvpPresenter<UserView>() {
+class UserPresenter (val user: GithubUser): MvpPresenter<UserView>() {
+
+    @Inject
+    lateinit var mainThreadScheduler: Scheduler
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var usersRepo: IGithubUsersRepo
 
     val repoUserPresenter = RepoUserListPresenter()
 
@@ -40,11 +47,8 @@ class UserPresenter (val mainThreadScheduler: Scheduler,
         loadRepository(user)
 
         repoUserPresenter.itemClickListener = {
-            repoUserPresenter.repoUser[it.pos].forksCount?.let { forksCount ->
-                viewState.showSnackBarForkCount(
-                    forksCount
-                )
-            }
+            val repo = repoUserPresenter.repoUser[it.pos]
+            router.navigateTo(Screens.RepoScreen(repo))
         }
     }
 

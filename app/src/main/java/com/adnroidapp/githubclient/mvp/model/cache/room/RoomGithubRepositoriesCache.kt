@@ -1,6 +1,5 @@
 package com.adnroidapp.githubclient.mvp.model.cache.room
 
-import com.adnroidapp.githubclient.mvp.model.api.IDataSource
 import com.adnroidapp.githubclient.mvp.model.cache.IGithubRepositoriesCache
 import com.adnroidapp.githubclient.mvp.model.entity.GithubRepository
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
