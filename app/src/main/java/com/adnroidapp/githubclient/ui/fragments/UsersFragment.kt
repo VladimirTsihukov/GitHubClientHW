@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adnroidapp.githubclient.App
 import com.adnroidapp.githubclient.R
+import com.adnroidapp.githubclient.di.user.UserSubComponent
 import com.adnroidapp.githubclient.mvp.presenter.UsersPresenter
 import com.adnroidapp.githubclient.mvp.view.UsersView
 import com.adnroidapp.githubclient.ui.BackButtonListener
 import com.adnroidapp.githubclient.ui.adapter.AdapterUsers
-import com.adnroidapp.githubclient.ui.image.GlideImageLoader
 import kotlinx.android.synthetic.main.fragment_users.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -21,8 +21,11 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         fun newInstance() = UsersFragment()
     }
 
+    private var userSubComponent: UserSubComponent? = null
+
     val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter().apply { App.instance.appComponent.inject(this) }
+        userSubComponent = App.instance.initUserSubComponent()
+        UsersPresenter().apply { userSubComponent?.inject(this) }
     }
 
     var adapter: AdapterUsers? = null
@@ -36,12 +39,20 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun init() {
         rv_user.layoutManager = LinearLayoutManager(context)
-        adapter = AdapterUsers(presenter.usersListPresenter, GlideImageLoader())
+
+        adapter = AdapterUsers(presenter.usersListPresenter).apply {
+            userSubComponent?.inject(this)
+        }
         rv_user.adapter = adapter
     }
 
     override fun updateList() {
         adapter?.notifyDataSetChanged()
+    }
+
+    override fun release() {
+        userSubComponent = null
+        App.instance.releaseUserSubComponent()
     }
 
     override fun backPressed() = presenter.backPressed()

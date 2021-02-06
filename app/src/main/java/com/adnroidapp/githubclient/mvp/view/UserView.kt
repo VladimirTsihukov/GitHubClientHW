@@ -9,4 +9,5 @@ interface UserView: MvpView {
     fun initRepoAdapter()
     fun updateList()
     fun showSnackBarForkCount(forkCount: Int)
+    fun release()
 }

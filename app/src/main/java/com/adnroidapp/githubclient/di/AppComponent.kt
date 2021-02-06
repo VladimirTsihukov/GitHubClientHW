@@ -1,10 +1,8 @@
 package com.adnroidapp.githubclient.di
 
 import com.adnroidapp.githubclient.di.modul.*
+import com.adnroidapp.githubclient.di.user.UserSubComponent
 import com.adnroidapp.githubclient.mvp.presenter.MainPresenter
-import com.adnroidapp.githubclient.mvp.presenter.RepoPresenter
-import com.adnroidapp.githubclient.mvp.presenter.UserPresenter
-import com.adnroidapp.githubclient.mvp.presenter.UsersPresenter
 import com.adnroidapp.githubclient.ui.MainActivity
 import dagger.Component
 import javax.inject.Singleton
@@ -16,13 +14,12 @@ import javax.inject.Singleton
         AppModule::class,
         CiceroneModule::class,
         DatabaseModule::class,
-        RepoModule::class,
+        ImageModule::class,
     ]
 )
-interface AppComponent {            //определяем в какие классы мы будем внедряться
+interface AppComponent {
+    fun userSubComponent(): UserSubComponent
+
     fun inject(mainActivity: MainActivity)
     fun inject(mainPresenter: MainPresenter)
-    fun inject(usersPresenter: UsersPresenter)
-    fun inject(userPresenter: UserPresenter)
-    fun inject(repoPresenter: RepoPresenter)
 }
