@@ -11,16 +11,16 @@ import kotlinx.android.synthetic.main.fragment_repo.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class RepoFragment: MvpAppCompatFragment(R.layout.fragment_repo), RepoView, BackButtonListener {
+class RepoFragment : MvpAppCompatFragment(R.layout.fragment_repo), RepoView, BackButtonListener {
 
     val presenter: RepoPresenter by moxyPresenter {
         val repository = arguments?.getParcelable<GithubRepository>(REPO_KEY) as GithubRepository
         RepoPresenter(repository).apply {
-            App.instance.appComponent.inject(this)
+            App.instance.repoSubComponent?.inject(this)
         }
     }
 
-    companion object{
+    companion object {
         private const val REPO_KEY = "repo_key"
 
         fun newInstance(repository: GithubRepository) = RepoFragment().apply {

@@ -3,6 +3,7 @@ package com.adnroidapp.githubclient.ui.fragments
 import android.os.Bundle
 import com.adnroidapp.githubclient.App
 import com.adnroidapp.githubclient.R
+import com.adnroidapp.githubclient.di.repository.RepoSubComponent
 import com.adnroidapp.githubclient.mvp.model.entity.GithubUser
 import com.adnroidapp.githubclient.mvp.presenter.UserPresenter
 import com.adnroidapp.githubclient.mvp.view.UserView
@@ -16,10 +17,13 @@ import moxy.ktx.moxyPresenter
 
 class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView, BackButtonListener {
 
+    private var repositorySubComponent: RepoSubComponent? = null
+
     private val presenter by moxyPresenter {
+        repositorySubComponent = App.instance.initRepoSubComponent()
         arguments?.getParcelable<GithubUser>(MainActivity.KEY_USER_FRAGMENT_URL)?.let {
             UserPresenter(user = it).apply {
-                App.instance.appComponent.inject(this)
+                repositorySubComponent?.inject(this)
             }
         }!!
     }
@@ -44,6 +48,11 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView, Bac
                 Snackbar.make(view, text, Snackbar.LENGTH_LONG).show()
             }
         }
+    }
+
+    override fun release() {
+        repositorySubComponent = null
+        App.instance.releaseRepoSubComponent()
     }
 
     companion object {
